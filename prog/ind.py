@@ -11,39 +11,28 @@
 # к функции и вызовите декорированную функцию.
 # Результат работы отобразите на экране.
 
-def morze_decorator(func):
-    """
-    Декоратор функции, возвращающий строку, преобразованную в азбуку морзе.
-    """
-    morze = {
-        'а': '.-', 'б': '-...', 'в': '.--', 'г': '--.',
-        'д': '-..', 'е': '.', 'ё': '.', 'ж': '...-', 'з': '--..',
-        'и': '..', 'й': '.---', 'к': '-.-', 'л': '.-..', 'м': '--',
-        'н': '-.', 'о': '---', 'п': '.--.', 'р': '.-.', 'с': '...',
-        'т': '-', 'у': '..-', 'ф': '..-.', 'х': '....', 'ц': '-.-.',
-        'ч': '---.', 'ш': '----', 'щ': '--.-', 'ъ': '--.--', 'ы': '-.--',
-        'ь': '-..-', 'э': '..-..', 'ю': '..--', 'я': '.-.-', ' ': '-···-'
-    }
+def sum_decorator(start):
+    def decorator(func):
+        def wrapper(numbers):
+            nums = [int(num) for num in numbers.split()]
+            total_sum = sum(nums) + start
+            return total_sum
 
-    def wrapper(arg):
-        """
-        Функция-обертка.
-        """
-        arg = func(arg)
-        return ' '.join([morze[char] for char in arg if char in morze])
-    return wrapper
+        return wrapper
 
+    return decorator
 
-@morze_decorator
-def process_string(s):
-    """
-    Переводит строку в нижний регистр и удаляет из нее лишние пробелы.    
-    """
-    s = ' '.join(s.lower().split())
-    return s
+@sum_decorator(start=5)
+def sum_of_numbers(numbers):
+    # Функция для подсчета суммы чисел
+    nums = [int(num) for num in numbers.split()]
+    total_sum = sum(nums)
+    return total_sum
 
+# Ввод строки целых чисел
+numbers_string = input("Введите строку целых чисел через пробел: ")
 
-if __name__ == "__main__":
-    input_string = "ПрИвЕт Я Хилол"
-    output_string = process_string(input_string)
-    print(f"{output_string = }")
+# Получаем сумму чисел с учетом декоратора
+result = sum_of_numbers(numbers_string)
+
+print("Сумма чисел с учетом стартового значения 5:", result)
